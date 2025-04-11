@@ -1,16 +1,11 @@
 import streamlit as st
 from well_functions import *
 from mapping import plot_wells_on_map
-
 import pandas as pd
 df = pd.read_parquet("wells_cleaned_main.parquet")
-df.columns = df.columns.str.lower().str.strip()
-if 'x' not in df.columns and 'dd_long' in df.columns:
-    df['x'] = df['dd_long']
-if 'y' not in df.columns and 'dd_lat' in df.columns:
-    df['y'] = df['dd_lat']
+df = ensure_coordinates(df)
 
-#
+
 
 # Set Streamlit app title
 st.title("Arizona Well Data Explorer")

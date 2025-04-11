@@ -4,12 +4,14 @@ import plotly.graph_objects as go
 import plotly.express as px
 import json
 import streamlit as st
+from well_functions import ensure_coordinates
 
 # Load Arizona boundary for default extent
 az_boundary = gpd.read_file("shapefiles/AZ_State_Bound.shp").to_crs(epsg=4326)
 
 def plot_wells_on_map(df, selected_group=None, group_col=None):
     """Create a map plot of selected wells over the Arizona boundary using MapLibre."""
+    df = ensure_coordinates(df)
     if selected_group and group_col:
         df[group_col] = df[group_col].str.strip().str.lower()
         selected_group = selected_group.lower()

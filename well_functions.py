@@ -7,7 +7,7 @@ import json
 df = pd.read_parquet("wells_cleaned_main.parquet")
 df.columns = df.columns.str.lower().str.strip()
 
-# Ensure x and y coordinate aliases exist if not already present
+# Ensure coordinates exist
 if 'x' not in df.columns and 'dd_long' in df.columns:
     df['x'] = df['dd_long']
 if 'y' not in df.columns and 'dd_lat' in df.columns:
@@ -18,6 +18,15 @@ with open("docs/wells_schema.json", "r") as f:
     schema = json.load(f)
 
 column_labels = {entry["name"].lower(): entry["description"] for entry in schema}
+
+def ensure_coordinates(df):
+    """Ensure DataFrame has 'x' and 'y' columns based on 'dd_long' and 'dd_lat'."""
+    df.columns = df.columns.str.lower().str.strip()
+    if 'x' not in df.columns and 'dd_long' in df.columns:
+        df['x'] = df['dd_long']
+    if 'y' not in df.columns and 'dd_lat' in df.columns:
+        df['y'] = df['dd_lat']
+    return df
 
 def get_label(col):
     return column_labels.get(col.lower(), col)
@@ -85,6 +94,7 @@ def make_well_vertical_plot(df, selected_group=None, group_col=None, depth_mode=
         depth_mode (str): 'wl_dtw' (well_alt to water table) or 'well_depth' (water table to well bottom).
     """
     df.columns = df.columns.str.lower().str.strip()
+    df = ensure_coordinates(df)
 
     if selected_group and group_col:
         df[group_col] = df[group_col].str.strip().str.lower()
@@ -154,7 +164,7 @@ if __name__ == "__main__":
     print(get_summary_stats(value_col, group_col).head())
 
     print("\nGenerating demo plots for group:", selected_group)
-    #make_boxplot(value_col, group_col, selected_group).show()
-    #make_histogram(value_col, selected_group, group_col).show()
-    #make_scatter_xyz(value_col, selected_group, group_col).show()
+    make_boxplot(value_col, group_col, selected_group).show()
+    make_histogram(value_col, selected_group, group_col).show()
+    make_scatter_xyz(value_col, selected_group, group_col).show()
     make_well_vertical_plot(df, selected_group, group_col).show()
