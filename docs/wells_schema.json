@@ -1,0 +1,254 @@
+[
+  {
+    "name": "OBJECTID",
+    "description": "Unique internal identifier (typically from GIS system).",
+    "source": "GWSI original points",
+    "functionality": "JoinField"
+  },
+  {
+    "name": "SITE_ID",
+    "description": "Unique site/well identifier assigned by the agency.",
+    "source": "GWSI original points",
+    "functionality": "metadata"
+  },
+  {
+    "name": "REG_ID",
+    "description": "Regional identifier (e.g., agency or administrative region).",
+    "source": "GWSI original points",
+    "functionality": "metadata"
+  },
+  {
+    "name": "WELL_TYPE",
+    "description": "Type of well (e.g., monitoring, production, irrigation).",
+    "source": "GWSI original points",
+    "functionality": "metadata"
+  },
+  {
+    "name": "LATITUDE",
+    "description": "Latitude in decimal degrees (NAD83).",
+    "source": "GWSI original points",
+    "functionality": "y-coordinate"
+  },
+  {
+    "name": "LONGITUDE",
+    "description": "Longitude in decimal degrees (NAD83).",
+    "source": "GWSI original points",
+    "functionality": "x-coordinate"
+  },
+  {
+    "name": "LAT_NAD83",
+    "description": "Latitude in decimal degrees (NAD83).",
+    "source": "GWSI original points",
+    "functionality": "y-coordinate"
+  },
+  {
+    "name": "LAT_NAD27",
+    "description": "Latitude in decimal degrees (NAD27).",
+    "source": "GWSI original points",
+    "functionality": "y-coordinate"
+  },
+  {
+    "name": "LONG_NAD27",
+    "description": "Longitude in decimal degrees (NAD27).",
+    "source": "GWSI original points",
+    "functionality": "x-coordinate"
+  },
+  {
+    "name": "WELL_ALT",
+    "description": "Elevation of the well site (feet).",
+    "source": "GWSI original points",
+    "functionality": "z-coordinate"
+  },
+  {
+    "name": "WATER_USE",
+    "description": "Primary use of the water (e.g., domestic, municipal, agricultural).",
+    "source": "GWSI original points",
+    "functionality": "metadata"
+  },
+  {
+    "name": "WELL_DEPTH",
+    "description": "Total depth of the well (feet).",
+    "source": "GWSI original points",
+    "functionality": "value (z-coord)"
+  },
+  {
+    "name": "CASE_DIAM",
+    "description": "Diameter of the well casing (inches?).",
+    "source": "GWSI original points",
+    "functionality": "metadata"
+  },
+  {
+    "name": "WL_COUNT",
+    "description": "Number of water level measurements available.",
+    "source": "GWSI original points",
+    "functionality": "metadata"
+  },
+  {
+    "name": "WL_DTW",
+    "description": "Depth to water (distance from land surface to water level).",
+    "source": "GWSI original points",
+    "functionality": "value (z-coord)"
+  },
+  {
+    "name": "WL_ELEV",
+    "description": "Elevation of the water surface (datum-dependent).",
+    "source": "Computed from DTW + alt",
+    "functionality": "value (z-coord)"
+  },
+  {
+    "name": "DRILL_DATE",
+    "description": "Date the well was drilled.",
+    "source": "GWSI original points",
+    "functionality": "filtering"
+  },
+  {
+    "name": "LASTWLDATE",
+    "description": "Date of last water level measurement.",
+    "source": "GWSI original points",
+    "functionality": "filtering"
+  },
+  {
+    "name": "FREQUENCY",
+    "description": "Frequency of measurement or monitoring.",
+    "source": "GWSI original points",
+    "functionality": "filtering"
+  },
+  {
+    "name": "DRILL_DA_1",
+    "description": "Duplicate or alternative drill date (legacy field).",
+    "source": "GWSI original points",
+    "functionality": "metadata"
+  },
+  {
+    "name": "LSTWLDT_TE",
+    "description": "Duplicate or alternative last measurement date (legacy field).",
+    "source": "GWSI original points",
+    "functionality": "metadata"
+  },
+  {
+    "name": "SGMC_LABEL",
+    "description": "Stratigraphic label from state geologic mapping. Surficial Geology",
+    "source": "SGMC Geology AZ",
+    "functionality": "metadata"
+  },
+  {
+    "name": "UNIT_LINK",
+    "description": "Geologic unit code or linking key. Surficial Geology",
+    "source": "SGMC Geology AZ",
+    "functionality": "metadata"
+  },
+  {
+    "name": "UNIT_NAME",
+    "description": "Name of geologic unit intersected. Surficial Geology",
+    "source": "SGMC Geology AZ",
+    "functionality": "group by"
+  },
+  {
+    "name": "AGE_MIN",
+    "description": "Minimum geologic age (e.g., epoch or system). Surficial Geology",
+    "source": "SGMC Geology AZ",
+    "functionality": "filtering"
+  },
+  {
+    "name": "AGE_MAX",
+    "description": "Maximum geologic age. Surficial Geology",
+    "source": "SGMC Geology AZ",
+    "functionality": "filtering"
+  },
+  {
+    "name": "MAJOR1",
+    "description": "Primary lithologic or geologic descriptor. Surficial Geology",
+    "source": "SGMC Geology AZ",
+    "functionality": "group by"
+  },
+  {
+    "name": "MAJOR2",
+    "description": "Secondary lithologic descriptor. Surficial Geology",
+    "source": "SGMC Geology AZ",
+    "functionality": "group by"
+  },
+  {
+    "name": "MAJOR3",
+    "description": "Tertiary lithologic descriptor. Surficial Geology",
+    "source": "SGMC Geology AZ",
+    "functionality": "group by"
+  },
+  {
+    "name": "MINOR1",
+    "description": "Additional lithologic descriptor. Surficial Geology",
+    "source": "SGMC Geology AZ",
+    "functionality": "metadata"
+  },
+  {
+    "name": "MINOR2",
+    "description": "Additional lithologic descriptor. Surficial Geology",
+    "source": "SGMC Geology AZ",
+    "functionality": "metadata"
+  },
+  {
+    "name": "MINOR3",
+    "description": "Additional lithologic descriptor. Surficial Geology",
+    "source": "SGMC Geology AZ",
+    "functionality": "metadata"
+  },
+  {
+    "name": "GENERALIZE",
+    "description": "Generalized geologic classification. Surficial Geology",
+    "source": "SGMC Geology AZ",
+    "functionality": "group by"
+  },
+  {
+    "name": "ROCK_NAME",
+    "description": "Specific rock name at the well. Surficial Geology",
+    "source": "SGMC Geology AZ",
+    "functionality": "group by"
+  },
+  {
+    "name": "ROCK_TYPE",
+    "description": "Numeric or coded rock type category. Surficial Geology",
+    "source": "SGMC Geology AZ",
+    "functionality": "metadata"
+  },
+  {
+    "name": "AQ_NAME",
+    "description": "Name of major aquifer co-located with well.",
+    "source": "ADWR Groundwater Subbasin",
+    "functionality": "group by"
+  },
+  {
+    "name": "NAME_ABBR",
+    "description": "Abbreviated name of basin/subunit.",
+    "source": "Basin polygon layer",
+    "functionality": "group by"
+  },
+  {
+    "name": "BASIN_NAME_1",
+    "description": "Name of AMA or INA if in one.",
+    "source": "AZ_AMA_and_INA",
+    "functionality": "group by"
+  },
+  {
+    "name": "NAME_ABBR_1",
+    "description": "Abbreviated name of basin.",
+    "source": "AZ_AMA_and_INA",
+    "functionality": "metadata"
+  },
+  {
+    "name": "SUBBASIN_NAME",
+    "description": "Subdivision of the hydrologic basin.",
+    "source": "ADWR Groundwater Subbasin",
+    "functionality": "group by"
+  },
+  {
+    "name": "NAME_ABBR_12",
+    "description": "Abbreviated name for subbasin or region.",
+    "source": "ADWR Groundwater Subbasin",
+    "functionality": "metadata"
+  },
+  {
+    "name": "SUBBASIN_NAME_GWSI",
+    "description": "Subbasin name used in GWSI.",
+    "source": "ADWR Groundwater Subbasin",
+    "functionality": "redundant"
+  }
+]
