@@ -10,6 +10,8 @@ if 'x' not in df.columns and 'dd_long' in df.columns:
 if 'y' not in df.columns and 'dd_lat' in df.columns:
     df['y'] = df['dd_lat']
 
+#
+
 # Set Streamlit app title
 st.title("Arizona Well Data Explorer")
 st.subheader("Data from the GWSI 2024 well dataset")
