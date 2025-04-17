@@ -139,13 +139,13 @@ if selected_group:
 
     # ✅ Download section
 
-    csv = filtered_df.to_csv(index=False).encode('utf-8')
-
     st.markdown("### Download Filtered Data")
+    csv = filtered_df.to_csv(index=False).encode('utf-8')
+    file_safe_group = selected_group.replace(" ", "_").lower()
+    file_name = f"filtered_wells_{file_safe_group}.csv"
     st.download_button(
         label="⬇️ Download CSV",
         data=csv,
         file_name=file_name,
         mime='text/csv'
     )
-    st.caption("Download the wells currently selected by the filters above as a CSV file.")
