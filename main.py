@@ -110,8 +110,7 @@ st.plotly_chart(make_scatter_xyz(value_col, selected_group, group_col), use_cont
 # Load metadata
 metadata = pd.read_parquet("wells_metadata.parquet")
 
-file_safe_group = selected_group.replace(" ", "_").lower()
-file_name = f"filtered_wells_{file_safe_group}.csv"
+
 
 # Show these sections only if a group has been selected
 if selected_group:
