@@ -3,6 +3,9 @@ import plotly.express as px
 import plotly.graph_objects as go
 import json
 
+DEFAULT_HEIGHT = 768
+
+
 # Load the cleaned dataset (cached so it's only read once)
 df = pd.read_parquet("wells_cleaned_main.parquet")
 df.columns = df.columns.str.lower().str.strip()
@@ -69,6 +72,7 @@ def make_boxplot(value_col, group_col, selected_group=None):
     fig = px.box(data, x=group_col, y=value_col, color=group_col if not selected_group else None, points="outliers")
     fig.update_layout(
         title=f"Boxplot of {get_label(value_col)} by {get_label(group_col)}",
+        height=DEFAULT_HEIGHT*2,
         xaxis_title=get_label(group_col),
         yaxis_title=get_label(value_col),
         yaxis=dict(autorange="reversed")
@@ -82,6 +86,7 @@ def make_histogram(value_col, selected_group=None, group_col=None):
         title=f"Depth Distribution of {get_label(value_col)}",
         yaxis_title=get_label(value_col),
         xaxis_title="Count",
+        height=DEFAULT_HEIGHT,
         yaxis=dict(autorange="reversed")
     )
     return fig
@@ -92,6 +97,7 @@ def make_scatter_xyz(value_col, selected_group=None, group_col=None):
     fig = px.scatter_3d(data, x='x', y='y', z=value_col, color=color_col,
                         title=f"3D Scatter Plot of {get_label(value_col)}")
     fig.update_layout(
+        height=DEFAULT_HEIGHT,
         scene=dict(
             xaxis_title=get_label('longitude'),
             yaxis_title=get_label('latitude'),
@@ -194,151 +200,11 @@ def make_well_vertical_plot(df, metadata=None, selected_group=None, group_col=No
             zaxis_title='Elevation (m)',
         ),
         margin=dict(l=0, r=0, b=0, t=30),
-        height=600,
+        height=DEFAULT_HEIGHT,
         title="Vertical Profile of Wells by Water Use"
     )
 
     return fig
-# def make_well_vertical_plot(df, metadata=None, selected_group=None, group_col=None, depth_mode='wl_dtw'):
-#     """
-#     Creates a 3D vertical profile plot of wells, color-coded by WATER_USE.
-#
-#     Parameters:
-#         df (DataFrame): Main well dataset, must include 'x', 'y', 'well_alt', 'wl_dtw', 'well_depth'.
-#         metadata (DataFrame, optional): Metadata table that includes 'OBJECTID' and 'WATER_USE'.
-#         selected_group (str): Optional value to filter `group_col`.
-#         group_col (str): Column to group/filter on (from combined df).
-#         depth_mode (str): 'wl_dtw' or 'well_depth'.
-#     """
-#     df.columns = df.columns.str.lower().str.strip()
-#
-#     if metadata is not None:
-#         metadata.columns = metadata.columns.str.lower().str.strip()
-#         if 'objectid' in df.columns and 'objectid' in metadata.columns:
-#             df = df.merge(metadata[['objectid', 'water_use']], on='objectid', how='left')
-#         else:
-#             raise ValueError("Both df and metadata must contain 'OBJECTID' column for merging.")
-#
-#     df = ensure_coordinates(df)
-#
-#     if selected_group and group_col:
-#         df[group_col] = df[group_col].astype(str).str.strip().str.lower()
-#         selected_group = selected_group.lower()
-#         df = df[df[group_col] == selected_group]
-#
-#     if depth_mode == 'wl_dtw':
-#         df = df.dropna(subset=['x', 'y', 'well_alt', 'wl_dtw'])
-#         df['z_top'] = df['well_alt']
-#         df['z_bottom'] = df['well_alt'] - df['wl_dtw']
-#     elif depth_mode == 'well_depth':
-#         df = df.dropna(subset=['x', 'y', 'well_alt', 'wl_dtw', 'well_depth'])
-#         df['z_top'] = df['well_alt'] - df['wl_dtw']
-#         df['z_bottom'] = df['well_alt'] - df['well_depth']
-#     else:
-#         raise ValueError("depth_mode must be 'wl_dtw' or 'well_depth'")
-#
-#     if 'water_use' not in df.columns:
-#         raise KeyError("Column 'water_use' not found. Ensure metadata was provided or 'water_use' exists in df.")
-#
-#     water_uses = df['water_use'].dropna().unique()
-#     color_map = dict(zip(water_uses, px.colors.qualitative.Plotly[:len(water_uses)]))
-#
-#     fig = go.Figure()
-#
-#     for _, row in df.iterrows():
-#         color = color_map.get(row['water_use'], 'gray')
-#         fig.add_trace(go.Scatter3d(
-#             x=[row['x'], row['x']],
-#             y=[row['y'], row['y']],
-#             z=[row['z_top'], row['z_bottom']],
-#             mode='lines+markers',
-#             line=dict(color=color, width=4),
-#             marker=dict(size=2),
-#             hovertext=(
-#                 f"Well ID: {row.get('site_id', 'N/A')}<br>"
-#                 f"Water Use: {row.get('water_use', 'N/A')}<br>"
-#                 f"Elevation: {row['z_top']:.2f} m<br>"
-#                 f"DTW: {row.get('wl_dtw', 'N/A')}<br>"
-#                 f"Depth: {row.get('well_depth', 'N/A')}"
-#             ),
-#             hoverinfo='text',
-#             showlegend=False
-#         ))
-#
-#     fig.update_layout(
-#         scene=dict(
-#             xaxis_title='Longitude',
-#             yaxis_title='Latitude',
-#             zaxis_title='Elevation (m)',
-#         ),
-#         margin=dict(l=0, r=0, b=0, t=30),
-#         height=600,
-#         title="Vertical Profile of Wells by Water Use"
-#     )
-#
-#     return fig
-
-# def make_well_vertical_plot(df, selected_group=None, group_col=None, depth_mode='wl_dtw'):
-#     """
-#     Creates a 3D vertical profile plot of wells, color-coded by well_alt (z_top).
-#
-#     Parameters:
-#         df (DataFrame): Must include 'x', 'y', 'well_alt', 'wl_dtw', and optionally 'well_depth'.
-#         selected_group (str): Optional value to filter `group_col`.
-#         group_col (str): Column to group/filter on.
-#         depth_mode (str): 'wl_dtw' (well_alt to water table) or 'well_depth' (water table to well bottom).
-#     """
-#     df.columns = df.columns.str.lower().str.strip()
-#     df = ensure_coordinates(df)
-#
-#     if selected_group and group_col:
-#         df[group_col] = df[group_col].str.strip().str.lower()
-#         selected_group = selected_group.lower()
-#         df = df[df[group_col] == selected_group]
-#
-#     if depth_mode == 'wl_dtw':
-#         df = df.dropna(subset=['x', 'y', 'well_alt', 'wl_dtw'])
-#         df['z_top'] = df['well_alt']
-#         df['z_bottom'] = df['well_alt'] - df['wl_dtw']
-#     elif depth_mode == 'well_depth':
-#         df = df.dropna(subset=['x', 'y', 'well_alt', 'wl_dtw', 'well_depth'])
-#         df['z_top'] = df['well_alt'] - df['wl_dtw']
-#         df['z_bottom'] = df['well_alt'] - df['well_depth']
-#     else:
-#         raise ValueError("depth_mode must be 'wl_dtw' or 'well_depth'")
-#
-#     fig = go.Figure()
-#
-#     zmin = df['z_bottom'].min()
-#     zmax = df['z_bottom'].max()
-#
-#     for _, row in df.iterrows():
-#         fig.add_trace(go.Scatter3d(
-#             x=[row['x'], row['x']],
-#             y=[row['y'], row['y']],
-#             z=[row['z_top'], row['z_bottom']],
-#             mode='lines+markers',
-#             line=dict(color=row['z_bottom'], colorscale='Viridis', cmin=zmin, cmax=zmax, width=4),
-#             marker=dict(size=2),
-#             hovertext=f"Well ID: {row.get('well_id', 'N/A')}<br>Elevation: {row['z_top']:.2f} m<br>DTW: {row.get('wl_dtw', 'N/A')}<br>Depth: {row.get('well_depth', 'N/A')}",
-#             hoverinfo='text',
-#             showlegend=True
-#         ))
-#
-#     fig.update_layout(
-#         scene=dict(
-#             xaxis_title='Longitude',
-#             yaxis_title='Latitude',
-#             zaxis_title='Elevation (m)',
-#             zaxis=dict()
-#         ),
-#         coloraxis_colorbar=dict(title='Well Elevation (m)'),
-#         margin=dict(l=0, r=0, b=0, t=30),
-#         height=600,
-#         title="Vertical Profile of Wells by Elevation"
-#     )
-#
-#     return fig
 
 
 if __name__ == "__main__":

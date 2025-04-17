@@ -1,9 +1,35 @@
 import streamlit as st
+
+# ✅ MUST be the first Streamlit command
+st.set_page_config(
+    page_title="Arizona Well Data Explorer",
+    page_icon=":material/water_drop:",
+    layout="wide",
+    initial_sidebar_state="expanded"
+)
+
+# Optional custom CSS (can follow after)
+st.markdown("""
+    <style>
+    .main .block-container {
+        padding-top: 1rem;
+        padding-bottom: 1rem;
+        padding-left: 2rem;
+        padding-right: 2rem;
+    }
+    </style>
+    """, unsafe_allow_html=True)
+
 from well_functions import *
 from mapping import plot_wells_on_map
 import pandas as pd
+
+
+
+# Load data
 df = pd.read_parquet("wells_cleaned_main.parquet")
 df = ensure_coordinates(df)
+
 
 
 # Set Streamlit app title
@@ -61,30 +87,28 @@ st.plotly_chart(make_scatter_xyz(value_col, selected_group, group_col), use_cont
 # Load metadata
 metadata = pd.read_parquet("wells_metadata.parquet")
 
-# User interface
-st.subheader("3D View of Well Depths")
-depth_mode = st.radio("Choose vertical extent mode:", options=["wl_dtw", "well_depth"])
-
-# Plot with metadata passed in
-fig = make_well_vertical_plot(
-    df,
-    metadata=metadata,
-    selected_group=selected_group,
-    group_col=group_col,
-    depth_mode=depth_mode
-)
-
-#st.plotly_chart(fig, use_container_width=True)
-st.plotly_chart(fig, use_container_width=True, key="well_vertical_profile")
-
-# Show map of selected wells
-st.subheader("Map of Selected Wells")
-df.columns = df.columns.str.lower().str.strip()
-if 'x' not in df.columns and 'dd_long' in df.columns:
-    df['x'] = df['dd_long']
-if 'y' not in df.columns and 'dd_lat' in df.columns:
-    df['y'] = df['dd_lat']
+# Show these sections only if a group has been selected
 if selected_group:
+    # 3D well depth profile
+    st.subheader("3D View of Well Depths")
+    depth_mode = st.radio("Choose vertical extent mode:", options=["wl_dtw", "well_depth"])
+    fig = make_well_vertical_plot(
+        df,
+        metadata=metadata,
+        selected_group=selected_group,
+        group_col=group_col,
+        depth_mode=depth_mode
+    )
+    st.plotly_chart(fig, use_container_width=True, key="well_vertical_profile")
+
+    # Map of wells
+    st.subheader("Map of Selected Wells")
+    df.columns = df.columns.str.lower().str.strip()
+    if 'x' not in df.columns and 'dd_long' in df.columns:
+        df['x'] = df['dd_long']
+    if 'y' not in df.columns and 'dd_lat' in df.columns:
+        df['y'] = df['dd_lat']
     st.plotly_chart(plot_wells_on_map(df, selected_group, group_col), use_container_width=True, key="well_map")
-#if selected_group:
-#    st.plotly_chart(plot_wells_on_map(df, selected_group, group_col), use_container_width=True)
+else:
+    st.subheader("3D View of Well Depths")
+    st.caption("ℹ️ Select a group above to display the 3D profile and map.")
