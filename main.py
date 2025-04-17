@@ -22,6 +22,7 @@ st.markdown("""
 
 from well_functions import *
 from mapping import plot_wells_on_map
+from mapping import render_map_ui
 import pandas as pd
 
 
@@ -33,8 +34,23 @@ df = ensure_coordinates(df)
 
 
 # Set Streamlit app title
-st.title("Arizona Well Data Explorer")
-st.subheader("Data from the GWSI 2024 well dataset")
+
+st.markdown("""
+# Arizona Well Data Explorer 💧
+
+Welcome to the interactive groundwater data explorer for Arizona. This app utilizes data from the 2024 GWSI well database.
+
+This app allows you to:
+- Visualize groundwater well depths and water level elevations.
+- Explore well characteristics by region, aquifer, and geology.
+- Overlay hydrologic features like **Subbasins**, **AMAs**, and **Major Aquifers**.
+
+Use the dropdowns to filter wells, and view 3D depth profiles and geographic maps.
+
+> Created by Ryan Lima (ryan.lima@nau.edu) as part of the Arizona Tri-University Recharge Project
+---
+""")
+
 
 # Dropdowns for selecting variable of interest and grouping field
 value_columns, group_by_columns = get_available_columns()
@@ -102,13 +118,7 @@ if selected_group:
     st.plotly_chart(fig, use_container_width=True, key="well_vertical_profile")
 
     # Map of wells
-    st.subheader("Map of Selected Wells")
-    df.columns = df.columns.str.lower().str.strip()
-    if 'x' not in df.columns and 'dd_long' in df.columns:
-        df['x'] = df['dd_long']
-    if 'y' not in df.columns and 'dd_lat' in df.columns:
-        df['y'] = df['dd_lat']
-    st.plotly_chart(plot_wells_on_map(df, selected_group, group_col), use_container_width=True, key="well_map")
+    render_map_ui(df, selected_group, group_col)
 else:
     st.subheader("3D View of Well Depths")
     st.caption("ℹ️ Select a group above to display the 3D profile and map.")
